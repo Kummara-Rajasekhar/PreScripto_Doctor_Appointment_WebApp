@@ -5,6 +5,8 @@ import {v2 as cloudinary} from "cloudinary"
 import sortBy from "sort-by";
 import doctorModel from '../models/doctorModel.js'
 import jwt from 'jsonwebtoken'
+import appointmentModel from "../models/AppointmentModel.js";
+import userModel from "../models/userModel.js";
 
 
 
@@ -76,7 +78,62 @@ const allDoctors=async(req,res)=>{
 }
 
 
-export  {addDoctor,loginAdmin,allDoctors}
+const appointmentsAdmin=async(req,res)=>{
+    try{
+         const appointments= await appointmentModel.find({})
+         res.json({success:true,appointments})
+    }catch(error){
+          res.json({success:true,message:error.message})
+    }
+}
+
+const appointmentCancel = async (req, res) => {
+    try {
+        const { appointmentId } = req.body;
+        const appointmentData = await appointmentModel.findById(appointmentId)
+        await appointmentModel.findById(appointmentId, { cancelled: true })
+
+
+        const { docId, slotDate, slotTime } = appointmentData
+        const doctorData = await doctorModel.findById(docId)
+        let slots_booked = doctorData.slots_booked
+        slots_booked[slotDate] = slots_booked[slotDate].filter(e !== slotTime)
+        await doctorModel.findByIdAndUpdate(docId, { slots_booked })
+        res.json({ success: true, message: "Appointment Cancelled" })
+
+
+
+
+
+    } catch (error) {
+        res.json({ success: false, message: error.message })
+    }
+}
+
+const  adminDashBoard=async(req,res)=>{
+    try{
+          const doctors= await doctorModel.find({})
+          const users=await userModel.find({})
+          const appointments= await appointmentModel.find({})
+          const dashData={
+            doctors:doctors.length,
+            appointments:appointments.length,
+            patients:users.length,
+            latestAppointments:appointments.reverse().slice(0,5)
+
+          }
+          res.json({success:true,dashData})
+    }catch(error){
+        res.json({success:false,message:error.message})
+
+    }
+}
+
+
+
+
+
+export  {addDoctor,loginAdmin,allDoctors, appointmentsAdmin,appointmentCancel,adminDashBoard}
 
 
 
