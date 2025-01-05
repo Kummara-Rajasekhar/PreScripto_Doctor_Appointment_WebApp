@@ -3,7 +3,7 @@ import { assets } from '../assets/assets'
 
 const Contact = () => {
 
-  
+
   return (
     <div>
       <div className='text-center text-2xl pt-10 text-gray-500'>

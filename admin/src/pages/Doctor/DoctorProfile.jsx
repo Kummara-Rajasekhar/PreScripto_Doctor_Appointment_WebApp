@@ -9,28 +9,28 @@ import { toast } from 'react-toastify';
 
 const DoctorProfile = () => {
 
-  const { dtoken,backendurl, profiledata, setProfiledata, getProfiledata } = useContext(DoctorContext);
+  const { dtoken, backendurl, profiledata, setProfiledata, getProfiledata } = useContext(DoctorContext);
   const { currency } = useContext(AppContext)
   const [isEdit, setIsEdit] = useState(false)
-  const updateProfile=async()=>{
-    try{
-       const updateData={
-        address:profiledata.address,
-        fees:profiledata.fees,
-        available:profiledata.available
-       }
-       const {data}=await axios.post(backendurl+'/api/doctor/update-profile',updateData,{headers:{dtoken}})
+  const updateProfile = async () => {
+    try {
+      const updateData = {
+        address: profiledata.address,
+        fees: profiledata.fees,
+        available: profiledata.available
+      }
+      const { data } = await axios.post(backendurl + '/api/doctor/update-profile', updateData, { headers: { dtoken } })
 
-       if(data.success){
+      if (data.success) {
         toast.success(data.message)
         setIsEdit(false)
         getProfiledata()
-       }
-       else{
+      }
+      else {
         toast.error(data.message)
-       }
-    }catch(error){
-        toast.error(error.message)
+      }
+    } catch (error) {
+      toast.error(error.message)
     }
   }
 

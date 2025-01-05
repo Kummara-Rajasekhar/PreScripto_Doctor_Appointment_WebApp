@@ -17,31 +17,31 @@ import DoctorAppointment from './pages/Doctor/DoctorAppointment';
 import DoctorProfile from './pages/Doctor/DoctorProfile';
 const App = () => {
 
-  const {aToken} =useContext(AdminContext);
-  const {dtoken}=useContext(DoctorContext);
-  return aToken  ||  dtoken? (
+  const { aToken } = useContext(AdminContext);
+  const { dtoken } = useContext(DoctorContext);
+  return aToken || dtoken ? (
     <div className='bg-[#f*F9FD]'>
-      <ToastContainer/>
-      <Navbar/>
+      <ToastContainer />
+      <Navbar />
       <div className='flex items-start'>
-        <Sidebar/>
+        <Sidebar />
         <Routes>
-          <Route  path='/' element={<></>}/>
-          <Route  path='/admin-dashboard' element={<DashBoard/>}/>
-          <Route  path='/all-appointments' element={<AllAppointments/>}/>
-          <Route  path='/add-doctor' element={<AddDoctor/>}/>
-          <Route  path='/doctor-list' element={<DoctorsList/>}/>
+          <Route path='/' element={<></>} />
+          <Route path='/admin-dashboard' element={<DashBoard />} />
+          <Route path='/all-appointments' element={<AllAppointments />} />
+          <Route path='/add-doctor' element={<AddDoctor />} />
+          <Route path='/doctor-list' element={<DoctorsList />} />
 
 
-          <Route  path='/doctor-dashboard' element={<DoctorDashBoard/>}/>
-          <Route  path='/doctor-appointments' element={<DoctorAppointment/>}/>
-          <Route  path='/doctor-profile' element={<DoctorProfile/>}/>
+          <Route path='/doctor-dashboard' element={<DoctorDashBoard />} />
+          <Route path='/doctor-appointments' element={<DoctorAppointment />} />
+          <Route path='/doctor-profile' element={<DoctorProfile />} />
         </Routes>
       </div>
     </div>
-  ):(
+  ) : (
     <div>
-      <Llogin/>
+      <Llogin />
 
     </div>
   )
