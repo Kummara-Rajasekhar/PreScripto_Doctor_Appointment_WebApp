@@ -2,13 +2,38 @@ import React, { useState } from 'react'
 import {assets} from '../assets/assets'
 import { useContext } from 'react'
 import { AppContext } from '../context/Context'
+import axios from 'axios'
+import { toast } from 'react-toastify/unstyled'
 const MyProfile = () => {
 
   const {userData,setUserData,token,backendurl,loaduserData}=useContext(AppContext)
   const [isEdit,seetIdEdit]=useState(false)
   const [image,setimage]=useState(false)
   const updateuserProfiledata=async()=>{
+         try{
+          const formData=new FormData()
+          formData.append('name',userData.name);
+          formData.append('phone',userData.phone);
+          formData.append('address',JSON.stringify(userData.address));
+          formData.append('gender',userData.gender);
+          formData.append('dob',userData.dob);
+          image && formData.append('image',image)
+          const {data}= await axios.post(backendurl+'/api/user/update-profile',formData,{headers:token})
+          if(data.success){
+            toast.success(data.success)
+             await loaduserData()
+             seetIdEdit(false)
+             setimage(false)
 
+          }else{
+            toast.error(data.message)
+          }
+
+
+
+         }catch(error){
+          toast.error(error.message)
+         }
   }
 
   return userData && (
@@ -16,9 +41,9 @@ const MyProfile = () => {
         { 
           isEdit ?
           <label htmlFor='image'>
-             <div>
-              <img src={image ? URL.createObjectURL(image) : userData.image} alt="" />
-              <img src={image ? '': assets.upload_icon} alt="" />
+             <div className='inline-block relative cursor-pointer'>
+              <img className='w-36 riunded opacity-75 ' src={image ? URL.createObjectURL(image) : userData.image} alt="" />
+              <img className='w-10 absolute bottom-12 right-12' src={image ? '': assets.upload_icon} alt="" />
              </div>
              <input onChange={(e)=>setimage(e.target.files[0])} type="file" id='image' hidden/>
           </label>
@@ -82,7 +107,7 @@ const MyProfile = () => {
       <div>
         {
           isEdit 
-          ? <button className='border border-primary px-8 py-2 rounded-full hover:bg-primary hover:text-white transition-all' onClick={()=>seetIdEdit(false)}>Save Information</button>
+          ? <button className='border border-primary px-8 py-2 rounded-full hover:bg-primary hover:text-white transition-all' onClick={updateuserProfiledata}>Save Information</button>
           : <button className='border border-primary px-8 py-2 rounded-full hover:bg-primary hover:text-white transition-all' onClick={()=>seetIdEdit(true)}>Edit</button>
         }
       </div>

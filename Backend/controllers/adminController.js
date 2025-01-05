@@ -52,24 +52,19 @@ const addDoctor= async(req,res)=>{
 
 
 //API for admin login
-const loginAdmin = async (req, res) => {
-    try {
-        const { email, password } = req.body;
-
-        // Verify email and password against environment variables
-        if (email === process.env.ADMIN_EMAIL && password === process.env.ADMIN_PW) {
-            // Create JWT token
-            const token = jwt.sign({ email }, process.env.JWT_SECRET, { expiresIn: '1h' });
-
-            return res.json({ success: true, token });
-        } else {
-            return res.json({ success: false, message: "Invalid credentials" });
-        }
-    } catch (error) {
-        return res.json({ success: false, message: error.message });
+const loginAdmin=async(req,res)=>{
+    try{
+         const {email,password}=req.body;
+         if(email===process.env.ADMIN_EMAIL && password===process.env.ADMIN_PW){
+             const token =jwt.sign(email+password,process.env.JWT_SECRET)
+             res.json({success:true,token})
+         }else{
+            res.json({success:false,message:"Invalid credentials"})
+         }
+    }catch(error){
+          res.json({success:false,message:error.message})
     }
-};
-
+}
 
 const allDoctors=async(req,res)=>{
     try{

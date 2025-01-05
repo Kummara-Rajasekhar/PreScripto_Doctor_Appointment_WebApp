@@ -19,7 +19,7 @@ const AppContextProvider=(props)=>{
 
     const getDoctorsData=async()=>{
         try{
-             const {data}=await axois.get(backendurl+'/api/doctor/list')
+             const {data}=await axios.get(backendurl+'/api/doctor/list')
              if(data.success){
                   setdoctors(data.doctors)
              }else{
@@ -33,10 +33,11 @@ const AppContextProvider=(props)=>{
         getDoctorsData()
     },[])
     
+    
 
     const loaduserData=async()=>{
         try{
-             const {data}=await axois.get(backendurl+'/api/user/get-profile',{headers:{token}})
+             const {data}=await axios.get(backendurl+'/api/user/get-profile',{headers:{token}})
              if(data.success){
                 setuserdata(data.userData)
              }else{
@@ -70,7 +71,8 @@ const AppContextProvider=(props)=>{
         setToken,
         userData,
         setuserdata,
-        loaduserData
+        loaduserData,
+        getDoctorsData
     }
     return (
         <AppContext.Provider value={value}>
